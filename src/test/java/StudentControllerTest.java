@@ -33,71 +33,83 @@ public class StudentControllerTest {
 
 	@MockBean
 	private AuthenticationService authenticationService;
+//
+//	@MockBean
+//	private StudentService studentService;
+//
+//	Course mockCourse = new Course("Course1", "Spring", "10 Steps",
+//			Arrays.asList("Learn Maven", "Import Project", "First Example",
+//					"Second Example"));
 
-	@MockBean
-	private StudentService studentService;
-
-	Course mockCourse = new Course("Course1", "Spring", "10 Steps",
-			Arrays.asList("Learn Maven", "Import Project", "First Example",
-					"Second Example"));
-
-	String exampleCourseJson = "{\"name\":\"Spring\",\"description\":\"10 Steps\",\"steps\":[\"Learn Maven\",\"Import Project\",\"First Example\",\"Second Example\"]}";
+	String exampleLoginJson = "{\"accountName\":\"Ivanov\"," +
+			"\"accountNumber\":10000," +
+			"\"pin\":1111}";
 
 	@Test
 	public void login() throws Exception {
 		RequestBuilder requestBuilder = MockMvcRequestBuilders
-				.post("/teller/gettoken/0")
-				.accept(MediaType.APPLICATION_JSON).content(exampleCourseJson)
-				.contentType(MediaType.APPLICATION_JSON);
-	}
-
-	@Test
-	public void retrieveDetailsForCourse() throws Exception {
-
-		Mockito.when(
-				studentService.retrieveCourse(Mockito.anyString(),
-						Mockito.anyString())).thenReturn(mockCourse);
-
-		RequestBuilder requestBuilder = MockMvcRequestBuilders.get(
-				"/students/Student1/courses/Course1").accept(
-				MediaType.APPLICATION_JSON);
-
-		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
-
-		System.out.println(result.getResponse());
-		String expected = "{id:Course1,name:Spring,description:10 Steps}";
-
-		// {"id":"Course1","name":"Spring","description":"10 Steps, 25 Examples and 10K Students","steps":["Learn Maven","Import Project","First Example","Second Example"]}
-
-		JSONAssert.assertEquals(expected, result.getResponse()
-				.getContentAsString(), false);
-	}
-
-	@Test
-	public void createStudentCourse() throws Exception {
-		Course mockCourse = new Course("1", "Smallest Number", "1",
-				Arrays.asList("1", "2", "3", "4"));
-
-		// studentService.addCourse to respond back with mockCourse
-		Mockito.when(
-				studentService.addCourse(Mockito.anyString(),
-						Mockito.any(Course.class))).thenReturn(mockCourse);
-
-		// Send course as body to /students/Student1/courses
-		RequestBuilder requestBuilder = MockMvcRequestBuilders
-				.post("/students/Student1/courses")
-				.accept(MediaType.APPLICATION_JSON).content(exampleCourseJson)
+				.post("/teller/gettoken/1")
+				.accept(MediaType.APPLICATION_JSON).content(exampleLoginJson)
 				.contentType(MediaType.APPLICATION_JSON);
 
 		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
 
 		MockHttpServletResponse response = result.getResponse();
 
-		assertEquals(HttpStatus.CREATED.value(), response.getStatus());
+		assertEquals(200, response.getStatus());
 
-		assertEquals("http://localhost/students/Student1/courses/1",
-				response.getHeader(HttpHeaders.LOCATION));
+//		assertEquals("http://localhost/students/Student1/courses/1",
+//				response.getHeader(HttpHeaders.LOCATION));
 
 	}
+//
+//	@Test
+//	public void retrieveDetailsForCourse() throws Exception {
+//
+//		Mockito.when(
+//				studentService.retrieveCourse(Mockito.anyString(),
+//						Mockito.anyString())).thenReturn(mockCourse);
+//
+//		RequestBuilder requestBuilder = MockMvcRequestBuilders.get(
+//				"/students/Student1/courses/Course1").accept(
+//				MediaType.APPLICATION_JSON);
+//
+//		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+//
+//		System.out.println(result.getResponse());
+//		String expected = "{id:Course1,name:Spring,description:10 Steps}";
+//
+//		// {"id":"Course1","name":"Spring","description":"10 Steps, 25 Examples and 10K Students","steps":["Learn Maven","Import Project","First Example","Second Example"]}
+//
+//		JSONAssert.assertEquals(expected, result.getResponse()
+//				.getContentAsString(), false);
+//	}
+//
+//	@Test
+//	public void createStudentCourse() throws Exception {
+//		Course mockCourse = new Course("1", "Smallest Number", "1",
+//				Arrays.asList("1", "2", "3", "4"));
+//
+//		// studentService.addCourse to respond back with mockCourse
+//		Mockito.when(
+//				studentService.addCourse(Mockito.anyString(),
+//						Mockito.any(Course.class))).thenReturn(mockCourse);
+//
+//		// Send course as body to /students/Student1/courses
+//		RequestBuilder requestBuilder = MockMvcRequestBuilders
+//				.post("/students/Student1/courses")
+//				.accept(MediaType.APPLICATION_JSON).content(exampleLoginJson)
+//				.contentType(MediaType.APPLICATION_JSON);
+//
+//		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+//
+//		MockHttpServletResponse response = result.getResponse();
+//
+//		assertEquals(HttpStatus.CREATED.value(), response.getStatus());
+//
+//		assertEquals("http://localhost/students/Student1/courses/1",
+//				response.getHeader(HttpHeaders.LOCATION));
+//
+//	}
 
 }
